@@ -1,5 +1,8 @@
-Please make sure your data is organized as follows:
+Download dataset [here](https://drive.google.com/drive/folders/1DmyIye4Gc9wwaA7MVKFVi-bWD2qQb-qN?usp=sharing)
 
+Please organize the dataset as follows:
+
+```
 data/
 ├── nnUNet_raw/
 │   ├── Dataset701_AbdomenCT/
@@ -23,4 +26,4 @@ data/
 │   │   │   ├── ...
 │   │   ├── dataset.json
 │   ├── ...
-"""
+```
