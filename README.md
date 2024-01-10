@@ -21,6 +21,8 @@ import torch
 import mamba_ssm
 ```
 
+![network](https://github.com/bowang-lab/U-Mamba/blob/main/assets/U-Mamba-network.png)
+
 ## Model Training
 Download dataset [here](https://drive.google.com/drive/folders/1DmyIye4Gc9wwaA7MVKFVi-bWD2qQb-qN?usp=sharing) and put them into the [data folder](https://github.com/bowang-lab/U-Mamba/blob/92a741a9147e66fdce330287389f594cee46fff1/umamba/nnunetv2/paths.py#L20). U-Mamaba is built on the popular [nnU-Net](https://github.com/MIC-DKFZ/nnUNet) framework. If you want to train U-Mamba on your own dataset, please follow this [guidline](https://github.com/MIC-DKFZ/nnUNet/blob/master/documentation/dataset_format.md) to prepare the dataset. 
 
