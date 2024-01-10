@@ -15,9 +15,34 @@
 import os
 join = os.path.join
 """
-PLEASE READ paths.md FOR INFORMATION TO HOW TO SET THIS UP
+Please make sure your data is organized as follows:
+
+data/
+├── nnUNet_raw/
+│   ├── Dataset701_AbdomenCT/
+│   │   ├── imagesTr
+│   │   │   ├── FLARE22_Tr_0001_0000.nii.gz
+│   │   │   ├── FLARE22_Tr_0002_0000.nii.gz
+│   │   │   ├── ...
+│   │   ├── labelsTr
+│   │   │   ├── FLARE22_Tr_0001.nii.gz
+│   │   │   ├── FLARE22_Tr_0002.nii.gz
+│   │   │   ├── ...
+│   │   ├── dataset.json
+│   ├── Dataset702_AbdomenMR/
+│   │   ├── imagesTr
+│   │   │   ├── amos_0507_0000.nii.gz
+│   │   │   ├── amos_0508_0000.nii.gz
+│   │   │   ├── ...
+│   │   ├── labelsTr
+│   │   │   ├── amos_0507.nii.gz
+│   │   │   ├── amos_0508.nii.gz
+│   │   │   ├── ...
+│   │   ├── dataset.json
+│   ├── ...
 """
-base = 'path to your data' # e.g. /home/user_name/Documents/U-Mamba/data
+base = join(os.sep.join(__file__.split(os.sep)[:-3]), 'data') 
+# or you can set your own path, e.g., base = '/home/user_name/Documents/U-Mamba/data'
 nnUNet_raw = join(base, 'nnUNet_raw') # os.environ.get('nnUNet_raw')
 nnUNet_preprocessed = join(base, 'nnUNet_preprocessed') # os.environ.get('nnUNet_preprocessed')
 nnUNet_results = join(base, 'nnUNet_results') # os.environ.get('nnUNet_results')

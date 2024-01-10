@@ -1,0 +1,21 @@
+{ 
+ "channel_names": { 
+   "0": "R",
+   "1": "G",
+   "2": "B"
+ }, 
+ "labels": { 
+    "background": 0,
+    "Bipolar Forceps": 1,
+    "Prograsp Forceps": 2,
+    "Large Needle Driver": 3,
+    "Vessel Sealer": 4,
+    "Grasping Retractor": 5,
+    "Monopolar Curved Scissors": 6,
+    "Ultrasound Probe": 7
+}, 
+ "numTraining": 1800, 
+ "file_ending": ".png",
+ "name": "Dataset704_Endovis17",
+ "description": "This dataset was from the MICCAI 2017 Robotic Instrument Segmentation Challenge https://endovissub2017-roboticinstrumentsegmentation.grand-challenge.org/Home/"
+ }

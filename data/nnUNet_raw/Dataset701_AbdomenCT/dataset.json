@@ -1,0 +1,25 @@
+{
+    "channel_names": {
+        "0": "CT"
+    },
+    "labels": {
+        "background": 0,
+        "liver": 1,
+        "right kidney": 2,
+        "spleen": 3,
+        "pancreas": 4,
+        "aorta": 5,
+        "inferior vena cava": 6,
+        "right adrenal gland": 7,
+        "left adrenal gland": 8,
+        "gallbladder": 9,
+        "esophagus": 10,
+        "stomach": 11,
+        "duodenum": 12,
+        "left kidney": 13
+    },
+    "numTraining": 50,
+    "file_ending": ".nii.gz",
+    "name": "Dataset701_AbdomenCT",
+    "description": "This dataset was from MICCAI FLARE 2022 Challenge. The training set contained 50 CT scans that were from the MSD Pancreas dataset and the annotations were from AbdomenCT-1K. Another 50 validation cases were from TCIA and the annotations were provided by the challenge organizers."
+}

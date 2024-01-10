@@ -1,0 +1,16 @@
+{
+    "channel_names": {
+        "0": "R",
+        "1": "G",
+        "2": "B"
+    },
+    "labels": {
+        "background": 0,
+        "interior": 1,
+        "boundary": 2
+    },
+    "numTraining": 1000,
+    "file_ending": ".png",
+    "name": "Dataset703_NeurIPSCell",
+    "description": "This dataset was from the NeurIPS 2022 Cell Segmentation Challenge https://neurips22-cellseg.grand-challenge.org/. Please note that this is an instance segmentation task."
+}
