@@ -9,9 +9,9 @@ from torch import nn
 
 from monai.networks.nets import SwinUNETR
 
-class nnUNetTrainerSwinUNETR(nnUNetTrainerNoDeepSupervision):
+class nnUNetTrainerSwinUNETR_Tiny(nnUNetTrainerNoDeepSupervision):
     """
-    Swin-UNETR default configuration
+    Using Swin-Tranformer's Tiny backbone configuration.
     """
     def __init__(self, plans: dict, configuration: str, fold: int, dataset_json: dict, unpack_dataset: bool = True,
                  device: torch.device = torch.device('cuda')):
@@ -56,8 +56,8 @@ class nnUNetTrainerSwinUNETR(nnUNetTrainerNoDeepSupervision):
             spatial_dims = spatial_dims,
             downsample = "merging",
             use_v2 = False,
-            depths = (2, 2, 2, 2),
-            feature_size = 48
+            depths = (2, 2, 6, 2),
+            feature_size = 96
         )
 
         return model

@@ -1,35 +1,29 @@
 from nnunetv2.training.nnUNetTrainer.variants.network_architecture.nnUNetTrainerNoDeepSupervision import \
     nnUNetTrainerNoDeepSupervision
 from nnunetv2.utilities.plans_handling.plans_handler import ConfigurationManager, PlansManager
-from nnunetv2.training.loss.dice import get_tp_fp_fn_tn
-import torch
-from torch.optim import AdamW
-from torch.optim.lr_scheduler import CosineAnnealingLR
+from nnunetv2.training.lr_scheduler.polylr import PolyLRScheduler
 from torch import nn
+import torch
 
-from monai.networks.nets import SwinUNETR
+from nnunetv2.training.loss.dice import get_tp_fp_fn_tn
 
-class nnUNetTrainerSwinUNETR(nnUNetTrainerNoDeepSupervision):
-    """
-    Swin-UNETR default configuration
-    """
-    def __init__(self, plans: dict, configuration: str, fold: int, dataset_json: dict, unpack_dataset: bool = True,
-                 device: torch.device = torch.device('cuda')):
+from monai.networks.nets import SegResNet
+from torch.optim import Adam
+
+class nnUNetTrainerSegResNet_2xFeat_2xDepth(nnUNetTrainerNoDeepSupervision):
+    def __init__(
+            self,
+            plans: dict,
+            configuration: str,
+            fold: int,
+            dataset_json: dict,
+            unpack_dataset: bool = True,
+            device: torch.device = torch.device('cuda')
+        ):
         super().__init__(plans, configuration, fold, dataset_json, unpack_dataset, device)
-        original_patch_size = self.configuration_manager.patch_size
-        new_patch_size = [-1] * len(original_patch_size)
-        for i in range(len(original_patch_size)):
-            if (original_patch_size[i] / 2**5) < 1 or ((original_patch_size[i] / 2**5) % 1) != 0:
-                new_patch_size[i] = round(original_patch_size[i] / 2**5 + 0.5) * 2**5
-            else:
-                new_patch_size[i] = original_patch_size[i]
-        self.configuration_manager.configuration['patch_size'] = new_patch_size
-        self.print_to_log_file("Patch size changed from {} to {}".format(original_patch_size, new_patch_size))
-        self.plans_manager.plans['configurations'][self.configuration_name]['patch_size'] = new_patch_size
-
         self.grad_scaler = None
-        self.initial_lr = 8e-4
-        self.weight_decay = 0.01
+        self.initial_lr = 1e-4
+        self.weight_decay = 1e-5
 
     @staticmethod
     def build_network_architecture(plans_manager: PlansManager,
@@ -37,31 +31,22 @@ class nnUNetTrainerSwinUNETR(nnUNetTrainerNoDeepSupervision):
                                    configuration_manager: ConfigurationManager,
                                    num_input_channels,
                                    enable_deep_supervision: bool = False) -> nn.Module:
-
+        
         label_manager = plans_manager.get_label_manager(dataset_json)
-        img_size = configuration_manager.patch_size
-        spatial_dims = len(img_size)
+        spatial_dims = len(configuration_manager.patch_size)
 
-        model = SwinUNETR(
+        model = SegResNet(
+            spatial_dims = spatial_dims,
+            init_filters = 64,
             in_channels = num_input_channels,
             out_channels = label_manager.num_segmentation_heads,
-            img_size = img_size,
-            num_heads = (3, 6, 12, 24),
-            norm_name = "instance",
-            drop_rate = 0.0,
-            attn_drop_rate = 0.0,
-            dropout_path_rate = 0.0,
-            normalize = True,
-            use_checkpoint = False,
-            spatial_dims = spatial_dims,
-            downsample = "merging",
-            use_v2 = False,
-            depths = (2, 2, 2, 2),
-            feature_size = 48
+            blocks_down = [2, 4, 4, 8],
+            blocks_up = [2, 2, 2]
         )
 
         return model
     
+
     def train_step(self, batch: dict) -> dict:
         data = batch['data']
         target = batch['target']
@@ -145,11 +130,8 @@ class nnUNetTrainerSwinUNETR(nnUNetTrainerNoDeepSupervision):
     
     def configure_optimizers(self):
 
-        optimizer = AdamW(self.network.parameters(), lr=self.initial_lr, weight_decay=self.weight_decay, eps=1e-5)
-        scheduler = CosineAnnealingLR(optimizer, T_max=self.num_epochs, eta_min=1e-6)
-
-        self.print_to_log_file(f"Using optimizer {optimizer}")
-        self.print_to_log_file(f"Using scheduler {scheduler}")
+        optimizer = Adam(self.network.parameters(), lr=self.initial_lr, weight_decay=self.weight_decay, eps=1e-5)
+        scheduler = PolyLRScheduler(optimizer, self.initial_lr, self.num_epochs, exponent=0.9)
 
         return optimizer, scheduler
     
