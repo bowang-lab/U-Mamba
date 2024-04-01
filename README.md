@@ -9,7 +9,7 @@ Requirements: `Ubuntu 20.04`, `CUDA 11.7`
 
 1. Create a virtual environment: `conda create -n umamba python=3.10 -y` and `conda activate umamba `
 2. Install [Pytorch](https://pytorch.org/get-started/previous-versions/#linux-and-windows-4) 2.0.1: `pip install torch==2.0.1 torchvision==0.15.2`
-3. Install [Mamba](https://github.com/state-spaces/mamba): `pip install causal-conv1d==1.1.1` and `pip install mamba-ssm`
+3. Install [Mamba](https://github.com/state-spaces/mamba): `pip install causal-conv1d>=1.2.0` and `pip install mamba-ssm`
 4. Download code: `git clone https://github.com/bowang-lab/U-Mamba`
 5. `cd U-Mamba/umamba` and run `pip install -e .`
 
@@ -84,6 +84,21 @@ nnUNetv2_predict -i INPUT_FOLDER -o OUTPUT_FOLDER -d DATASET_ID -c CONFIGURATION
 
 > `CONFIGURATION` can be `2d` and `3d_fullres` for 2D and 3D models, respectively.
 
+## Remarks
+
+1. Path settings
+
+The default data directory for U-Mamba is preset to U-Mamba/data. Users with existing nnUNet setups who wish to use alternative directories for `nnUNet_raw`, `nnUNet_preprocessed`, and `nnUNet_results` can easily adjust these paths in umamba/nnunetv2/path.py to update your specific nnUNet data directory locations, as demonstrated below:
+
+```python
+# An example to set other data path,
+base = '/home/user_name/Documents/U-Mamba/data'
+nnUNet_raw = join(base, 'nnUNet_raw') # or change to os.environ.get('nnUNet_raw')
+nnUNet_preprocessed = join(base, 'nnUNet_preprocessed') # or change to os.environ.get('nnUNet_preprocessed')
+nnUNet_results = join(base, 'nnUNet_results') # or change to os.environ.get('nnUNet_results')
+```
+
+2. AMP could lead to nan in the Mamba module. We also provide a trainer without AMP: https://github.com/bowang-lab/U-Mamba/blob/main/umamba/nnunetv2/training/nnUNetTrainer/nnUNetTrainerUMambaEncNoAMP.py
 
 ## Paper
 
