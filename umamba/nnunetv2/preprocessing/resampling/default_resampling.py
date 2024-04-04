@@ -120,7 +120,7 @@ def fast_resample_data_or_seg_to_shape(data: Union[torch.Tensor, np.ndarray],
                                   force_separate_z: Union[bool, None] = False,
                                   separate_z_anisotropy_threshold: float = ANISO_THRESHOLD):
 
-    use_gpu = torch.cuda.is_available()
+    use_gpu = False
     device = torch.device("cuda" if use_gpu else "cpu")
     order_to_mode_map = {
         0: "nearest",
